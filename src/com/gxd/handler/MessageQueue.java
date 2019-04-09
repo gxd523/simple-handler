@@ -1,5 +1,7 @@
 package com.gxd.handler;
 
+import java.util.concurrent.DelayQueue;
+
 /**
  * Created by guoxiaodong on 2019/4/7 20:06
  */
@@ -8,7 +10,7 @@ public class MessageQueue {
      * True if the message queue can be quit.
      */
     private final boolean mQuitAllowed;
-    Message mMessages;
+    private DelayQueue<Message> queue = new DelayQueue<>();
 
     public MessageQueue(boolean quitAllowed) {
         this.mQuitAllowed = quitAllowed;
@@ -17,15 +19,23 @@ public class MessageQueue {
     /**
      * 出队列
      */
-    Message next() {
-        return new Message();
+    public Message next() {
+        try {
+            return queue.take();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
      * 入队列
      */
-    boolean enqueueMessage(Message msg) {
-        mMessages = msg;
-        return true;
+    public void enqueueMessage(Message msg) {
+        queue.add(msg);
+    }
+
+    public void quit() {
+        queue.clear();
     }
 }

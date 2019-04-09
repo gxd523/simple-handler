@@ -8,11 +8,11 @@ import com.sun.istack.internal.Nullable;
 public class Looper {
     static final ThreadLocal<Looper> sThreadLocal = new ThreadLocal<>();
     private static Looper sMainLooper;  // guarded by Looper.class
-    final MessageQueue mQueue;
+    final MessageQueue messageQueue;
     final Thread mThread;
 
     private Looper(boolean quitAllowed) {
-        mQueue = new MessageQueue(quitAllowed);
+        messageQueue = new MessageQueue(quitAllowed);
         mThread = Thread.currentThread();
     }
 
@@ -48,13 +48,16 @@ public class Looper {
             throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
         }
         for (; ; ) {
-            Message msg = me.mQueue.next(); // might block
-            if (msg == null) {
-                // No message indicates that the message queue is quitting.
+            Message msg = me.messageQueue.next(); // might block
+            if (msg == null) {// No message indicates that the message queue is quitting.
                 return;
             }
             msg.target.dispatchMessage(msg);
             msg.recycle();
         }
+    }
+
+    public void quit() {
+        messageQueue.quit();
     }
 }

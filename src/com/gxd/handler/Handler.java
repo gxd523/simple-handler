@@ -5,56 +5,44 @@ package com.gxd.handler;
  */
 public class Handler {
     final Looper mLooper;
-    final MessageQueue mQueue;
-    final Callback mCallback;
+    final MessageQueue messageQueue;
 
-    public Handler(Callback callback) {
+    public Handler() {
         mLooper = Looper.myLooper();
         if (mLooper == null) {
             throw new RuntimeException("Can't create handler inside thread that has not called Looper.prepare()");
         }
-        mQueue = mLooper.mQueue;
-        mCallback = callback;
+        messageQueue = mLooper.messageQueue;
     }
 
-    public Handler(Looper looper, Callback callback) {
+    public Handler(Looper looper) {
         mLooper = looper;
-        mQueue = mLooper.mQueue;
-        mCallback = callback;
+        messageQueue = mLooper.messageQueue;
     }
 
     private static void handleCallback(Message message) {
         message.callback.run();
     }
 
-    public final boolean sendMessage(Message msg) {
-        return sendMessageAtTime(msg);
-    }
-
-    public boolean sendMessageAtTime(Message msg) {
-        MessageQueue queue = mQueue;
-        if (queue == null) {
-            RuntimeException e = new RuntimeException(this + " sendMessageAtTime() called with no mQueue");
-            System.out.println(e.getMessage());
-            return false;
-        }
-        return enqueueMessage(queue, msg);
-    }
-
-    private boolean enqueueMessage(MessageQueue queue, Message msg) {
+    public final void sendMessageDelayed(Message msg, long delayMillis) {
         msg.target = this;
-        return queue.enqueueMessage(msg);
+        if (delayMillis < 0) {
+            delayMillis = 0;
+        }
+        msg.when = System.currentTimeMillis() + delayMillis;
+        messageQueue.enqueueMessage(msg);
+    }
+
+    public final void postDelayed(Runnable r, long delayMillis) {
+        Message msg = Message.obtain();
+        msg.callback = r;
+        sendMessageDelayed(msg, delayMillis);
     }
 
     public void dispatchMessage(Message msg) {
         if (msg.callback != null) {
             handleCallback(msg);
         } else {
-            if (mCallback != null) {
-                if (mCallback.handleMessage(msg)) {
-                    return;
-                }
-            }
             handleMessage(msg);
         }
     }
