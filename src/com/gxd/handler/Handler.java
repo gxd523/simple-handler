@@ -4,8 +4,8 @@ package com.gxd.handler;
  * Created by guoxiaodong on 2019/4/7 20:06
  */
 public class Handler {
-    final Looper mLooper;
-    final MessageQueue messageQueue;
+    private final Looper mLooper;
+    private final MessageQueue messageQueue;
 
     public Handler() {
         mLooper = Looper.myLooper();
@@ -51,9 +51,5 @@ public class Handler {
      * Subclasses must implement this to receive messages.
      */
     public void handleMessage(Message msg) {
-    }
-
-    public interface Callback {
-        boolean handleMessage(Message msg);
     }
 }

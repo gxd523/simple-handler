@@ -4,7 +4,7 @@ package com.gxd.handler;
  * Created by guoxiaodong on 2019/4/9 19:54
  */
 public class HandlerThread extends Thread {
-    Looper mLooper;
+    private Looper mLooper;
     private Handler mHandler;
 
     public HandlerThread(String name) {
