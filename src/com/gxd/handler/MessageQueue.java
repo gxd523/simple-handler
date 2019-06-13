@@ -3,7 +3,7 @@ package com.gxd.handler;
 import java.util.concurrent.DelayQueue;
 
 /**
- * Created by guoxiaodong on 2019/4/7 20:06
+ * MessageQueue是消息机制的Java层和C++层的连接纽带，大部分核心方法都交给native层来处理，这里用DelayQueue替代
  */
 public class MessageQueue {
     /**

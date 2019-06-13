@@ -7,5 +7,6 @@ public class ActivityThread {
     public static void main(String[] args) {
         Looper.prepareMainLooper();
         Looper.loop();
+        throw new RuntimeException("Main thread loop unexpectedly exited");
     }
 }

@@ -20,12 +20,8 @@ public class Handler {
         messageQueue = mLooper.messageQueue;
     }
 
-    private static void handleCallback(Message message) {
-        message.callback.run();
-    }
-
     public final void sendMessageDelayed(Message msg, long delayMillis) {
-        msg.target = this;
+        msg.target = this;// 这也是个重点
         if (delayMillis < 0) {
             delayMillis = 0;
         }
@@ -41,7 +37,7 @@ public class Handler {
 
     public void dispatchMessage(Message msg) {
         if (msg.callback != null) {
-            handleCallback(msg);
+            msg.callback.run();
         } else {
             handleMessage(msg);
         }

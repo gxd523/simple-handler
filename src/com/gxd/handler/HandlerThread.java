@@ -15,10 +15,10 @@ public class HandlerThread extends Thread {
         if (!isAlive()) {
             return null;
         }
-        synchronized (this) {
+        synchronized (this) {// 假如Looper.prepare();执行时间很长，那么主线程先拿到锁
             while (isAlive() && mLooper == null) {
                 try {
-                    wait();
+                    wait();// 调用wait()之后会释放锁
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -42,7 +42,7 @@ public class HandlerThread extends Thread {
     @Override
     public void run() {
         Looper.prepare();
-        synchronized (this) {
+        synchronized (this) {// getLooper()中调用wait()会释放锁，所以这里也拿得到锁
             mLooper = Looper.myLooper();
             notifyAll();
         }

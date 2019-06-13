@@ -4,23 +4,39 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by guoxiaodong on 2019/4/7 20:05
+ * Message采用单链表数据结构,这里实现Delayed，配合DelayQueue实现消息队列
  */
 public class Message implements Delayed {
     private static final int MAX_POOL_SIZE = 50;
     private static final Object sPoolSync = new Object();
     private static int sPoolSize = 0;
-    /**
-     * 类似栈结构
-     */
     private static Message sPool;
+    private Message next;
+    
+    /**
+     * 多久后触发
+     */
     public long when;
+    /**
+     * 消息内容
+     */
     public Object obj;
+    /**
+     * 参数2
+     */
     public int arg2;
+    /**
+     * 参数1
+     */
     public int arg1;
+    /**
+     * 消息类型
+     */
     public int what;
-    Message next;
     Runnable callback;
+    /**
+     * Looper.loop()循环拿到消息后，调用handler实例继续分发消息
+     */
     Handler target;
 
     /**
@@ -40,6 +56,9 @@ public class Message implements Delayed {
         return new Message();
     }
 
+    /**
+     * Message回收进消息池
+     */
     void recycle() {
         // Mark the message as in use while it remains in the recycled object pool.
         // Clear out all other details.
