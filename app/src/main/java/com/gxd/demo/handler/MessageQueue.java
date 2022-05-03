@@ -17,7 +17,7 @@ public class MessageQueue {
     }
 
     /**
-     * 出队列
+     * 出队列，详情请看源码
      */
     public Message next() {
         try {
@@ -29,7 +29,7 @@ public class MessageQueue {
     }
 
     /**
-     * 入队列
+     * 入队列，详情请看源码
      */
     public void enqueueMessage(Message msg) {
         queue.add(msg);
