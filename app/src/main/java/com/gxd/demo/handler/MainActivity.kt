@@ -10,6 +10,10 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        syncBarrierTest()
+    }
+
+    private fun syncBarrierTest() {
         SyncBarrierObj.sendSyncMessage()
         SyncBarrierObj.sendAsyncMessage()
         val token = SyncBarrierObj.sendSyncBarrier()
